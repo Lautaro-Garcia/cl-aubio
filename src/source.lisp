@@ -16,7 +16,7 @@
   (with-slots (internal-uri sample-rate hop-size) source
       (internal-source (aubio/bindings::|new_aubio_source| internal-uri sample-rate hop-size) source)))
 
-(defun read-source (a-source &key (as-lisp-vector nil) (monophonic t))
+(defun read-source (a-source &key as-lisp-vector (monophonic t))
   (with-slots (internal-source hop-size) a-source
     (let ((aubio-read-function (if monophonic #'aubio/bindings::|aubio_source_do| #'aubio/bindings::|aubio_source_do_multi|))
           (samples (if monophonic (make-float-vector hop-size) (make-float-matrix hop-size (channels a-source)))))
@@ -56,11 +56,11 @@
   `(let ((,variable (make-source ,uri ,hop-size ,sample-rate)))
      (unwind-protect (progn ,@body) (clean ,variable))))
 
-(defmacro do-source ((samples-variable uri hop-size &key (sample-rate 0) (monophonic t)) &body body)
+(defmacro do-source ((samples-variable uri hop-size &key (sample-rate 0) (monophonic t) as-lisp-vector) &body body)
   (let ((source-variable (gensym))
         (amount-read-variable (gensym)))
     `(with-source (,source-variable ,uri ,hop-size :sample-rate ,sample-rate)
        (loop :for (,samples-variable , amount-read-variable) := (multiple-value-list (read-source ,source-variable :monophonic ,monophonic
-                                                                                                                   :as-lisp-vector t))
+                                                                                                                   :as-lisp-vector ,as-lisp-vector))
              :while (= ,amount-read-variable ,hop-size)
              :do ,@body))))

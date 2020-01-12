@@ -8,7 +8,8 @@
                (:file "commons")
                (:file "float-vector")
                (:file "float-matrix")
-               (:file "source")))
+               (:file "source")
+               (:file "pitch")))
 
 
 (asdf:defsystem #:cl-aubio/raw-bindings

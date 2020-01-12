@@ -57,6 +57,20 @@ A call to `read-source` will return two values:
 * `do-source`: calls the body for every sample vector returned by a `read-source` call. I thought it would be a common enough use case to include it here.
 
 
+### Pitch detection
+A pitch object represents a pitch detection algorithm
+
+| Functionality                                | Function that does that thing                          |
+|----------------------------------------------|--------------------------------------------------------|
+| constructor                                  | `make-pitch`                                           |
+| get/set the tolerance threshold              | `tolerance` / `(setf tolerance)`                       |
+| get/set the silence threshold                | `silence-threshold` / `(setf silence-theshold)`        |
+| get the confidence of a particular detection | `confidence`                                           |
+| get/set the pitch detection unit             | `pitch-detection-unit` / `(setf pitch-detection-unit)` |
+| detect the pitch of an input                 | `detect-pitch`                                         |
+| cleanup memory                               | `clean`                                                |
+
+
 ### Aubio data structures
 Aubio defines its own data structures for some particular cases. The ones defined here are:
 * `fvec_t` is called `float-vector`
