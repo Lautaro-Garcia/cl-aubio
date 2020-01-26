@@ -9,7 +9,8 @@
                (:file "float-vector")
                (:file "float-matrix")
                (:file "source")
-               (:file "pitch")))
+               (:file "pitch")
+               (:file "onset")))
 
 
 (asdf:defsystem #:cl-aubio/raw-bindings

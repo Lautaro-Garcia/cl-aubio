@@ -35,10 +35,10 @@
 (defun confidence (a-pitch-detector)
   (aubio/bindings::|aubio_pitch_get_confidence| (slot-value a-pitch-detector 'internal-pitch)))
 
-(defun silence-threshold (a-pitch-detector)
+(defmethod silence-threshold ((a-pitch-detector pitch-detector))
   (aubio/bindings::|aubio_pitch_get_silence| (slot-value a-pitch-detector 'internal-pitch)))
 
-(defun (setf silence-threshold) (a-silence-threshold a-pitch-detector)
+(defmethod (setf silence-threshold) (a-silence-threshold (a-pitch-detector pitch-detector))
   (aubio/bindings::|aubio_pitch_set_silence| (slot-value a-pitch-detector 'internal-pitch)
                                              a-silence-threshold))
 
@@ -64,4 +64,4 @@
                             (slot-value an-input-source 'internal-aubio-object)
                             (slot-value output-vector 'internal-aubio-object))
            (elt (aubio-to-lisp output-vector) 0))
-      (when (clean output-vector)))))
+      (clean output-vector))))
