@@ -14,3 +14,12 @@
 
 (defgeneric (setf silence-threshold) (a-silence-threshold an-aubio-detector)
   (:documentation "Set the detector's silence threshold"))
+
+(defgeneric peak-picking-threshold (an-aubio-detector)
+  (:documentation "Get the detector peak-picking algorithm threshold"))
+
+(defgeneric (setf peak-picking-threshold) (a-peak-picking-threshold an-aubio-detector)
+  (:documentation "Set the detector's peak-picking algorithm threshold"))
+
+(defgeneric confidence (an-aubio-detector)
+  (:documentation "Get the detector confidence on it's detection"))

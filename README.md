@@ -5,7 +5,7 @@ This library provides the c-bindings for the [aubio audio library](https://aubio
 
 ## Pre-requisites
 Well, you have to have `libaubio` installed in your computer. You should probably check out the [aubio download page](https://aubio.org/download)
-It's worht noting that in this part, you could choose to install other libraries (such as [libsndfile](http://www.mega-nerd.com/libsndfile/) or
+It's worth noting that in this part, you could choose to install other libraries (such as [libsndfile](http://www.mega-nerd.com/libsndfile/) or
 [FFTW](http://www.fftw.org/)) and build aubio with them so it will try to leverage some of the work to those libraries. It is totallly optional.
 
 

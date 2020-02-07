@@ -32,7 +32,7 @@
   (aubio/bindings::|aubio_pitch_set_tolerance| (slot-value a-pitch-detector 'internal-pitch)
                                                a-tolerance))
 
-(defun confidence (a-pitch-detector)
+(defmethod confidence ((a-pitch-detector pitch-detector))
   (aubio/bindings::|aubio_pitch_get_confidence| (slot-value a-pitch-detector 'internal-pitch)))
 
 (defmethod silence-threshold ((a-pitch-detector pitch-detector))

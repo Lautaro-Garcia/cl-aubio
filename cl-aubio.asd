@@ -8,9 +8,11 @@
                (:file "commons")
                (:file "float-vector")
                (:file "float-matrix")
+               (:file "timestamp")
                (:file "source")
                (:file "pitch")
-               (:file "onset")))
+               (:file "onset")
+               (:file "tempo")))
 
 
 (asdf:defsystem #:cl-aubio/raw-bindings
