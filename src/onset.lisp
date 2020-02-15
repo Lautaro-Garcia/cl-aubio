@@ -1,12 +1,15 @@
 (in-package :cl-aubio)
 
+(deftype onset-detection-function ()
+  '(member "default" "energy" "hfc" "complex" "phase" "wphase" "specdiff" "kl" "mkl" "specflux"))
+
 (defclass onset-detector ()
-  ((detection-method :initarg :detection-method :type 'string)
-   (buffer-size :initarg :buffer-size :type 'integer)
-   (hop-size :initarg :hop-size :type 'integer)
-   (sample-rate :initarg :sample-rate :type 'integer)
-   (internal-method :writer internal-method)
-   (internal-onset :writer internal-onset)))
+  ((detection-method :initarg :detection-method :type onset-detection-function)
+   (buffer-size :initarg :buffer-size :type integer)
+   (hop-size :initarg :hop-size :type integer)
+   (sample-rate :initarg :sample-rate :type integer)
+   (internal-method :writer internal-method :type cffi:foreign-pointer)
+   (internal-onset :writer internal-onset :type cffi:foreign-pointer)))
 
 (defun make-onset-detector (method buffer-size hop-size sample-rate)
   (make-instance 'onset-detector :detection-method method :buffer-size buffer-size :hop-size hop-size :sample-rate sample-rate))
@@ -56,6 +59,7 @@
                                                  compression-factor))
 
 (defun minimum-inter-onset-interval (an-onset-detector &key (unit 'samples))
+  (declare (type timestamp-unit unit))
   (let ((internal-onset (slot-value an-onset-detector 'internal-onset)))
     (cond
       ((eq unit 'seconds) (aubio/bindings::|aubio_onset_get_minioi_s| internal-onset))
@@ -63,6 +67,7 @@
       (t (aubio/bindings::|aubio_onset_get_minioi| internal-onset)))))
 
 (defun (setf minimum-inter-onset-interval) (a-minimum-inter-onset-interval an-onset-detector &key (unit 'samples))
+  (declare (type timestamp-unit unit))
   (let ((internal-onset (slot-value an-onset-detector 'internal-onset)))
     (cond
       ((eq unit 'seconds) (aubio/bindings::|aubio_onset_set_minioi_s| internal-onset a-minimum-inter-onset-interval))
@@ -70,6 +75,7 @@
       (t (aubio/bindings::|aubio_onset_set_minioi| internal-onset a-minimum-inter-onset-interval)))))
 
 (defun time-of-latest-onset-detected (an-onset-detector &key (unit 'samples))
+  (declare (type timestamp-unit unit))
   (let ((internal-onset (slot-value an-onset-detector 'internal-onset)))
     (cond
       ((eq unit 'seconds) (aubio/bindings::|aubio_onset_get_last_s| internal-onset))
@@ -77,6 +83,7 @@
       (t (aubio/bindings::|aubio_onset_get_last| internal-onset)))))
 
 (defun detect-onset (an-onset-detector an-input-source &key (unit 'seconds))
+  (declare (type timestamp-unit unit))
   (let ((output-vector (make-float-vector (size an-input-source))))
     (unwind-protect
          (progn
@@ -84,6 +91,6 @@
                             (slot-value an-onset-detector 'internal-onset)
                             (slot-value an-input-source 'internal-aubio-object)
                             (slot-value output-vector 'internal-aubio-object))
-           (if (> (elt (aubio-to-lisp output-vector) 0) 0)
+           (when (> (elt (aubio-to-lisp output-vector) 0) 0)
              (time-of-latest-onset-detected an-onset-detector :unit unit)))
        (clean output-vector))))

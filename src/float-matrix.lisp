@@ -1,9 +1,9 @@
 (in-package :cl-aubio)
 
 (defclass float-matrix ()
-  ((length :initarg :length :type 'integer)
-   (height :initarg :height :type 'integer)
-   (internal-aubio-object :writer internal-aubio-object)))
+  ((length :initarg :length :type integer)
+   (height :initarg :height :type integer)
+   (internal-aubio-object :writer internal-aubio-object :type cffi:foreign-pointer)))
 
 (defun make-float-matrix (length height)
   (make-instance 'float-matrix :length length :height height))

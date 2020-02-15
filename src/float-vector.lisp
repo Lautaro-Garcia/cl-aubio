@@ -1,8 +1,8 @@
 (in-package :cl-aubio)
 
 (defclass float-vector ()
-  ((size :initarg :size :reader size :type 'integer)
-   (internal-aubio-object :writer internal-aubio-object)))
+  ((size :initarg :size :reader size :type integer)
+   (internal-aubio-object :writer internal-aubio-object :type cffi:foreign-pointer)))
 
 (defun make-float-vector (length)
   (make-instance 'float-vector :size length))
