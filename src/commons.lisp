@@ -23,3 +23,9 @@
 
 (defgeneric confidence (an-aubio-detector)
   (:documentation "Get the detector confidence on it's detection"))
+
+(defgeneric minimum-inter-onset-interval (a-detector &key unit)
+  (:documentation "Get the detector minimum inter onset interval in the unit specified"))
+
+(defgeneric (setf minimum-inter-onset-interval) (a-minimum-inter-onset-interval a-detector &key unit)
+  (:documentation "Set the detector minimum inter onset interval in the unit specified"))

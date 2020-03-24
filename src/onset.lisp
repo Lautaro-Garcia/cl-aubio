@@ -58,7 +58,7 @@
   (aubio/bindings::|aubio_onset_set_compression| (slot-value an-onset-detector 'internal-onset)
                                                  compression-factor))
 
-(defun minimum-inter-onset-interval (an-onset-detector &key (unit 'samples))
+(defmethod minimum-inter-onset-interval ((an-onset-detector onset-detector) &key (unit 'samples))
   (declare (type timestamp-unit unit))
   (let ((internal-onset (slot-value an-onset-detector 'internal-onset)))
     (cond
@@ -66,7 +66,7 @@
       ((eq unit 'milliseconds) (aubio/bindings::|aubio_onset_get_minioi_ms| internal-onset))
       (t (aubio/bindings::|aubio_onset_get_minioi| internal-onset)))))
 
-(defun (setf minimum-inter-onset-interval) (a-minimum-inter-onset-interval an-onset-detector &key (unit 'samples))
+(defmethod (setf minimum-inter-onset-interval) (a-minimum-inter-onset-interval (an-onset-detector onset-detector) &key (unit 'samples))
   (declare (type timestamp-unit unit))
   (let ((internal-onset (slot-value an-onset-detector 'internal-onset)))
     (cond

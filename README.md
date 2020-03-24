@@ -19,6 +19,9 @@ This is the one that you should use. It contains all the lipsy translations and 
 This package contains the raw bindings, with no name processing or whatsoever. You should only use this package if I was super lazy and
 didn't provide a lispy binding for some function.
 
+### `aubio/examples`
+A package to contain all the examples of usage of the different aubio objects
+
 
 ## Aubio objects
 Before explaining each object by itself, I want to tell you that the guys and gals in charge of the aubio project did an extremely good
@@ -30,8 +33,14 @@ job at mantaining its API object oriented. And what I am refering to is that
 So, in my Lisp translation I'm trying to mantain that convention in this form:
 * every object will be created with a `make-<name-of-the-object>` function
 * every object will be deleted with a `clean` generic function
-* I'll try to make a generic function for the `do` part, but only if I find that it makes sense to have a polymorphic of dealing with some objects.
+* I'll try to make a generic function for the `do` part, but only if I find that it makes sense to have a polymorphic way of dealing with some objects.
   In other cases, I probably will generate functions with more descriptive names of what the object is actually doing
+
+**Important note:** In order to distinguish the object that represents the detection algorithm and the thing being detected
+in this Lispy translation there exists two different objects to reify those two thing (like the `note-detector` and the `note` itself).
+In the aubio source, there is no "detector" and the detector is named after the thing it detects. There is no struct or datatype that
+reifies the thing being detected (in the previous example, a note is simply a list of three elements)
+
 
 ### Source
 A source object represents a source of audio.
@@ -58,17 +67,74 @@ A call to `read-source` will return two values:
 
 
 ### Pitch detection
-A pitch object represents a pitch detection algorithm
 
 | Functionality                                | Function that does that thing                          |
 |----------------------------------------------|--------------------------------------------------------|
-| constructor                                  | `make-pitch`                                           |
+| constructor                                  | `make-pitch-detector`                                  |
 | get/set the tolerance threshold              | `tolerance` / `(setf tolerance)`                       |
 | get/set the silence threshold                | `silence-threshold` / `(setf silence-theshold)`        |
 | get the confidence of a particular detection | `confidence`                                           |
 | get/set the pitch detection unit             | `pitch-detection-unit` / `(setf pitch-detection-unit)` |
 | detect the pitch of an input                 | `detect-pitch`                                         |
 | cleanup memory                               | `clean`                                                |
+
+
+A pitch detector object detects pitches, that contain
+* The value of the pitch
+* A confidence percentage  that this value is accurrate
+* The unit of the pitch
+
+
+### Onset detection
+
+| Functionality                                                          | Function that does that thing                                        |
+|------------------------------------------------------------------------|----------------------------------------------------------------------|
+| constructor                                                            | `make-onset-detector`                                                |
+| get/set the silence threshold                                          | `silence-threshold` / `(setf silence-threshold)`                     |
+| get/set the peak picking threshold                                     | `peak-picking-threshold` / `(setf peak-picking-threshold)`           |
+| reset the onset detector (forget the data about it's latest detection) | `reset-onset-detector`                                               |
+| get/set adaptive whitening                                             | `adaptive-whitening-enabled?`/`(setf adaptive-whitening-enabled?)`   |
+| get/set the compression factor                                         | `compression-factor`/`(setf compression-factor)`                     |
+| get/set the minimum inter-onset interval                               | `minimum-inter-onset-interval`/`(setf minimum-inter-onset-interval)` |
+| get the time of the latest onset detected                              | `time-of-latest-onset-detected`                                      |
+| detect the onset of an input                                           | `detect-onset`                                                       |
+| cleanup memory                                                         | `clean`                                                              |
+
+In this case, the onset is represented as a number that represents the seconds, milliseconds or samples that passed from the beginning
+of the audio until the note was hit.
+
+
+### Note detection
+
+This API could be considered as the sum of the prior two, maybe a little bit simplified (you can't change the parameters of the algorithms as much)
+
+| Functionality                            | Function that does that thing                                        |
+|------------------------------------------|----------------------------------------------------------------------|
+| constructor                              | `make-note-detector`                                                 |
+| get/set the silence threshold            | `silence-threshold`/`(setf silence-threshold)`                       |
+| get/set the release drop in dB           | `release-drop`/`(setf release-drop)`                                 |
+| get/set the minimum inter-onset interval | `minimum-inter-onset-interval`/`(setf minimum-inter-onset-interval)` |
+| detect the note of an input              | `detect-note`                                                        |
+| cleanup memory                           | `clean`                                                              |
+
+
+A note has:
+* The MIDI value of the note
+* It's velocity
+
+
+### Tempo detection
+
+| Functionality                       | Function that does that thing                              |
+|-------------------------------------|------------------------------------------------------------|
+| constructor                         | `make-note-detector`                                       |
+| get/set the silence threshold       | `silence-threshold`/`(setf silence-threshold)`             |
+| get/set the peak picking threshold  | `peak-picking-threshold` / `(setf peak-picking-threshold)` |
+
+This detector returns a `tempo` object that has the data of:
+* The bpm of the tempo
+* The last beat position
+* The confidence percentage
 
 
 ### Aubio data structures

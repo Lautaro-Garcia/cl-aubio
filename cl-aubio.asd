@@ -12,7 +12,8 @@
                (:file "source")
                (:file "pitch")
                (:file "onset")
-               (:file "tempo")))
+               (:file "tempo")
+               (:file "notes")))
 
 
 (asdf:defsystem #:cl-aubio/raw-bindings
@@ -30,3 +31,13 @@
                                              :foreign-library-name "aubio/bindings::aubio"
                                              :include-sources ()
                                              :foreign-library-spec ((t (:or "libaubio.so.5.4.8" "libaubio"))))))))
+
+(asdf:defsystem #:cl-aubio/examples
+  :description "System that contains examples of the usage of cl-aubio"
+  :author "Lautaro García"
+  :version "0.0.1"
+  :serial t
+  :depends-on (:cl-aubio)
+  :pathname "examples/"
+  :components ((:file "package")
+               (:file "notes")))
