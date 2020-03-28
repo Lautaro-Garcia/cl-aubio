@@ -11,7 +11,7 @@
    (buffer-size :initarg :buffer-size :type integer)
    (hop-size :initarg :hop-size :type integer)
    (sample-rate :initarg :sample-rate :type integer)
-   (unit :initform "Hz" :type pitch-detection-unit)
+   (unit :initform (cffi:foreign-string-alloc "Hz") :type cffi:foreign-pointer)
    (internal-method :writer internal-method :type cffi:foreign-pointer)
    (internal-pitch :writer internal-pitch :type cffi:foreign-pointer)))
 

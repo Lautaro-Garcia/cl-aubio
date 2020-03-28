@@ -56,9 +56,8 @@
   `(let ((,variable (make-source ,uri ,hop-size ,sample-rate)))
      (unwind-protect (progn ,@body) (clean ,variable))))
 
-(defmacro do-source ((samples-variable uri hop-size &key (sample-rate 0) (monophonic t) as-lisp-vector) &body body)
-  (let ((source-variable (gensym))
-        (amount-read-variable (gensym)))
+(defmacro do-source ((samples-variable uri hop-size &key (sample-rate 0) (monophonic t) (amount-read-variable (gensym)) as-lisp-vector) &body body)
+  (let ((source-variable (gensym)))
     `(with-source (,source-variable ,uri ,hop-size :sample-rate ,sample-rate)
        (loop :for (,samples-variable , amount-read-variable) := (multiple-value-list (read-source ,source-variable :monophonic ,monophonic
                                                                                                                    :as-lisp-vector ,as-lisp-vector))

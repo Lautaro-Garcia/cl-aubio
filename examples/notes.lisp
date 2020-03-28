@@ -4,7 +4,7 @@
 
 (setf (aubio:silence-threshold *note-detector*) -90.0)
 
-(defvar *note-vector* (make-array 0 :element-type 'note :adjustable t :fill-pointer 0))
+(defvar *note-vector* (make-array 0 :element-type 'aubio:note :adjustable t :fill-pointer 0))
 
 (defparameter *format-string* "~30<~a~;~a~;~a~>~%")
 
@@ -27,7 +27,7 @@
 
 (defun detect-notes ()
   (setf (fill-pointer *note-vector*) 0)
-  (cl-aubio:do-source (samples (namestring (truename "../examples/G-major-tune.wav")) 256 :sample-rate 44100)
+  (aubio:do-source (samples (namestring (truename "../examples/G-major-tune.wav")) 256 :sample-rate 44100)
     (let ((note (aubio:detect-note *note-detector* samples)))
       (when note (vector-push-extend note *note-vector*))))
   (print-notes *note-vector*))
