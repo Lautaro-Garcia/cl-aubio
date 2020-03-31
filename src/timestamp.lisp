@@ -1,11 +1,12 @@
 (in-package :cl-aubio)
 
 (deftype timestamp-unit ()
-  '(member samples seconds milliseconds))
+  '(member :samples :seconds :milliseconds))
 
 (defclass timestamp ()
   ((value :initarg :value :reader value :type float)
    (unit :initarg :unit :reader unit :type timestamp-unit)))
 
 (defun make-timestamp (value unit)
+  (declare (type timestamp-unit unit))
   (make-instance 'timestamp :value value :unit unit))

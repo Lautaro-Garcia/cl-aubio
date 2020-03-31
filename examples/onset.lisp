@@ -1,6 +1,6 @@
 (in-package :cl-aubio/examples)
 
-(defvar *onset-detector* (aubio:make-onset-detector "default" 512 256 44100))
+(defvar *onset-detector* (aubio:make-onset-detector 512 256 44100))
 
 (defvar *onset-vector* (make-array 0 :element-type 'integer :adjustable t :fill-pointer 0))
 

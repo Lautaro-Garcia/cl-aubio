@@ -1,13 +1,13 @@
 (in-package :cl-aubio)
 
 (deftype pitch-detection-unit ()
-  '(member "Hz" "midi" "cent" "bin"))
+  '(member :hz :midi :cent :bin))
 
 (deftype pitch-detection-method ()
-  '(member "default" "schmitt" "fcomb" "mcomb" "yin" "yinfast" "yinfft"))
+  '(member :default :schmitt :fcomb :mcomb :yin :yinfast :yinfft))
 
 (defclass pitch-detector ()
-  ((detection-method :initarg :detection-method :type pitch-detection-method :initform "default")
+  ((detection-method :initarg :detection-method :type pitch-detection-method :initform :default)
    (buffer-size :initarg :buffer-size :type integer)
    (hop-size :initarg :hop-size :type integer)
    (sample-rate :initarg :sample-rate :type integer)
@@ -18,14 +18,15 @@
 (defclass pitch ()
   ((pitch :initarg :pitch :reader pitch :type string)
    (confidence :initarg :confidence :reader confidence :type float)
-   (unit :initarg :unit :reader unit :type pitch-detection-unit :initform "Hz")))
+   (unit :initarg :unit :reader unit :type pitch-detection-unit :initform :hz)))
 
-(defun make-pitch-detector (buffer-size hop-size sample-rate &key (method "default"))
+(defun make-pitch-detector (buffer-size hop-size sample-rate &key (method :default))
+  (declare (type pitch-detection-method method))
   (make-instance 'pitch-detector :detection-method method :buffer-size buffer-size :hop-size hop-size :sample-rate sample-rate))
 
 (defmethod initialize-instance :after ((pitch-detector pitch-detector) &rest args &key &allow-other-keys)
   (declare (ignore args))
-  (internal-method (cffi:foreign-string-alloc (slot-value pitch-detector 'detection-method)) pitch-detector)
+  (internal-method (cffi:foreign-string-alloc (string-downcase (slot-value pitch-detector 'detection-method))) pitch-detector)
   (with-slots (internal-method buffer-size hop-size sample-rate) pitch-detector
     (internal-pitch (aubio/bindings::|new_aubio_pitch| internal-method buffer-size hop-size sample-rate)
                     pitch-detector)))
@@ -58,7 +59,8 @@
     (when unit (cffi:foreign-string-to-lisp unit))))
 
 (defun (setf pitch-detection-unit) (a-detection-unit a-pitch-detector)
-  (let ((c-detection-unit (cffi:foreign-string-alloc a-detection-unit))
+  (declare (type pitch-detection-unit a-detection-unit))
+  (let ((c-detection-unit (cffi:foreign-string-alloc (string-downcase a-detection-unit)))
         (previous-detection-unit (slot-value a-pitch-detector 'unit)))
     (aubio/bindings::|aubio_pitch_set_unit|
                      (slot-value a-pitch-detector 'internal-pitch)

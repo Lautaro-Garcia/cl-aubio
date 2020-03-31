@@ -2,12 +2,12 @@
 
 (defconstant +samplerate+ 44100)
 
-(defun *pitch-detector* (aubio:make-pitch-detector 4096 512 +samplerate+ :method "yin"))
+(defvar *pitch-detector* (aubio:make-pitch-detector 4096 512 +samplerate+ :method :yin))
 
 (defvar *pitch-vector* (make-array 0 :element-type 'aubio:pitch :adjustable t :fill-pointer 0))
 
 (setf (aubio:tolerance *pitch-detector*) 0.8)
-(setf (aubio:pitch-detection-unit *pitch-detector*) "midi")
+(setf (aubio:pitch-detection-unit *pitch-detector*) 'midi)
 
 (defun detect-pitches ()
   (setf (fill-pointer *pitch-vector*) 0)
