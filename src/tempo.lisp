@@ -9,7 +9,7 @@
    (internal-tempo :writer internal-tempo :type cffi:foreign-pointer)))
 
 (defclass tempo ()
-  ((last-beat-position :initarg :last :reader last-beat-position :type float)
+  ((last-beat-position :initarg :last :reader last-beat-position :type timestamp)
    (bpm :initarg :bpm :reader bpm :type integer)
    (confidence :initarg :confidence :reader confidence :type integer)))
 
