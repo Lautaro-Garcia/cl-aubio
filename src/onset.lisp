@@ -41,8 +41,8 @@
   (aubio/bindings::|aubio_onset_get_threshold| (slot-value an-onset-detector 'internal-onset)))
 
 (defmethod (setf peak-picking-threshold) (a-peak-picking-threshold (an-onset-detector onset-detector))
-  (aubio/bindings::|aubio_onset_set_threshold| (slot-value an-onset-detector 'internal-onset
-                                                a-peak-picking-threshold)))
+  (aubio/bindings::|aubio_onset_set_threshold| (slot-value an-onset-detector 'internal-onset)
+                                               a-peak-picking-threshold))
 
 (defun adaptive-whitening-enabled? (an-onset-detector)
   (= (aubio/bindings::|aubio_onset_get_awhitening| (slot-value an-onset-detector 'internal-onset))

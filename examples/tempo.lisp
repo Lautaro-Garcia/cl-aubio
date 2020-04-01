@@ -2,7 +2,7 @@
 
 (defparameter *sample-rate* 44100)
 (defparameter *hop-size* 256)
-(defvar *tempo-detector* (aubio:make-tempo-detector "default" 512 *hop-size* *sample-rate*))
+(defvar *tempo-detector* (aubio:make-tempo-detector 512 *hop-size* *sample-rate*))
 
 ;;tempo detection delay, in samples
 ;;default to 4 blocks delay to catch up with)

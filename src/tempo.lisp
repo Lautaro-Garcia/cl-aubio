@@ -1,7 +1,7 @@
 (in-package :cl-aubio)
 
 (defclass tempo-detector ()
-  ((detection-method :initarg :detection-method :type string)
+  ((detection-method :initarg :detection-method :initform "default" :type string)
    (buffer-size :initarg :buffer-size :type integer)
    (hop-size :initarg :hop-size :type integer)
    (sample-rate :initarg :sample-rate :type integer)
@@ -13,8 +13,8 @@
    (bpm :initarg :bpm :reader bpm :type integer)
    (confidence :initarg :confidence :reader confidence :type integer)))
 
-(defun make-tempo-detector (method buffer-size hop-size sample-rate)
-  (make-instance 'tempo-detector :detection-method method :buffer-size buffer-size :hop-size hop-size :sample-rate sample-rate))
+(defun make-tempo-detector (buffer-size hop-size sample-rate)
+  (make-instance 'tempo-detector :buffer-size buffer-size :hop-size hop-size :sample-rate sample-rate))
 
 (defmethod initialize-instance :after ((tempo-detector tempo-detector) &rest args &key &allow-other-keys)
   (declare (ignore args))

@@ -4,6 +4,7 @@
   :version "0.0.1"
   :pathname "src"
   :depends-on (:cl-aubio/raw-bindings)
+  :in-order-to ((test-op (test-op :cl-aubio/tests)))
   :components ((:file "package")
                (:file "commons")
                (:file "float-vector")
@@ -31,6 +32,21 @@
                                              :foreign-library-name "aubio/bindings::aubio"
                                              :include-sources ()
                                              :foreign-library-spec ((t (:or "libaubio.so.5.4.8" "libaubio"))))))))
+
+(asdf:defsystem #:cl-aubio/tests
+  :description "System for the tests of cl-aubio"
+  :author "Lautaro García"
+  :version "0.0.1"
+  :depends-on (:cl-aubio :fiveam)
+  :pathname "tests"
+  :serial t
+  :components ((:file "package")
+               (:file "utils")
+               (:file "notes")
+               (:file "onset")
+               (:file "pitch")
+               (:file "tempo"))
+  :perform (test-op (op s) (uiop:symbol-call :5am :run-all-tests)))
 
 (asdf:defsystem #:cl-aubio/examples
   :description "System that contains examples of the usage of cl-aubio"
