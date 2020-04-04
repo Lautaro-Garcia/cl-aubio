@@ -6,6 +6,7 @@
   :depends-on (:cl-aubio/raw-bindings)
   :in-order-to ((test-op (test-op :cl-aubio/tests)))
   :components ((:file "package")
+               (:file "aubio-object")
                (:file "commons")
                (:file "float-vector")
                (:file "float-matrix")
