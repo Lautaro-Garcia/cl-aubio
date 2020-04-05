@@ -8,7 +8,11 @@
    (buffer-size :initarg :buffer-size :type integer)
    (hop-size :initarg :hop-size :type integer)
    (sample-rate :initarg :sample-rate :type integer)
-   (internal-method :writer internal-method :type cffi:foreign-pointer)))
+   (silence-threshold :accessor silence-threshold :aubio-reader |aubio_onset_get_silence| :aubio-writer |aubio_onset_set_silence|)
+   (peak-picking-threshold :accessor peak-picking-threshold :aubio-reader |aubio_onset_get_threshold| :aubio-writer |aubio_onset_set_threshold|)
+   (compression-factor :accessor compression-factor :aubio-reader |aubio_onset_get_compression| :aubio-writer |aubio_onset_set_compression|)
+   (internal-method :writer internal-method :type cffi:foreign-pointer))
+  (:metaclass aubio-class))
 
 (defun make-onset-detector (buffer-size hop-size sample-rate &key (method :default))
   (declare (type onset-detection-function method))
@@ -29,20 +33,6 @@
 (defun reset-onset-detector (onset-detector)
   (aubio/bindings::|aubio_onset_reset| (internal-aubio-object onset-detector)))
 
-(defmethod silence-threshold ((an-onset-detector onset-detector))
-  (aubio/bindings::|aubio_onset_get_silence| (internal-aubio-object an-onset-detector)))
-
-(defmethod (setf silence-threshold) (a-silence-threshold (an-onset-detector onset-detector))
-  (aubio/bindings::|aubio_onset_set_silence| (internal-aubio-object an-onset-detector)
-                                             a-silence-threshold))
-
-(defmethod peak-picking-threshold ((an-onset-detector onset-detector))
-  (aubio/bindings::|aubio_onset_get_threshold| (internal-aubio-object an-onset-detector)))
-
-(defmethod (setf peak-picking-threshold) (a-peak-picking-threshold (an-onset-detector onset-detector))
-  (aubio/bindings::|aubio_onset_set_threshold| (internal-aubio-object an-onset-detector)
-                                               a-peak-picking-threshold))
-
 (defun adaptive-whitening-enabled? (an-onset-detector)
   (= (aubio/bindings::|aubio_onset_get_awhitening| (internal-aubio-object an-onset-detector))
      1))
@@ -50,13 +40,6 @@
 (defun (setf adaptive-whitening-enabled?) (should-use-adaptive-whitening an-onset-detector)
   (aubio/bindings::|aubio_onset_set_awhitening| (internal-aubio-object an-onset-detector)
                                                 (if should-use-adaptive-whitening 1 0)))
-
-(defun compression-factor (an-onset-detector)
-  (aubio/bindings::|aubio_onset_get_compression| (internal-aubio-object an-onset-detector)))
-
-(defun (setf compression-factor) (compression-factor an-onset-detector)
-  (aubio/bindings::|aubio_onset_set_compression| (internal-aubio-object an-onset-detector)
-                                                 compression-factor))
 
 (defmethod minimum-inter-onset-interval ((an-onset-detector onset-detector) &key (unit :samples))
   (declare (type timestamp-unit unit))

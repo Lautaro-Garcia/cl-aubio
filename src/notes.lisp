@@ -4,7 +4,12 @@
    ((buffer-size :initarg :buffer-size :type integer)
     (hop-size :initarg :hop-size :type integer)
     (sample-rate :initarg :sample-rate :type integer)
-    (internal-method :writer internal-method :type cffi:foreign-pointer)))
+    (silence-threshold :accessor silence-threshold :aubio-reader |aubio_notes_get_silence| :aubio-writer |aubio_notes_set_silence|)
+    ;; Hope the C API would let me ask for different units, as it does with the onset object
+    (minimum-inter-onset-interval :accessor minimum-inter-onset-interval-ms :aubio-reader |aubio_notes_get_minioi_ms| :aubio-writer |aubio_notes_set_minioi_ms|)
+    (release-drop :accessor release-drop :aubio-reader |aubio_notes_get_release_drop| :aubio-writer |aubio_notes_set_release_drop|)
+    (internal-method :writer internal-method :type cffi:foreign-pointer))
+   (:metaclass aubio-class))
 
 (defclass note ()
   ((midi-note :initarg :midi-note :reader midi-note :type integer)
@@ -26,29 +31,6 @@
 (defmethod clean ((note-detector note-detector))
   (aubio/bindings::|del_aubio_notes| (internal-aubio-object note-detector))
   (cffi:foreign-string-free (slot-value note-detector 'internal-method)))
-
-(defmethod silence-threshold ((a-note-detector note-detector))
-  (aubio/bindings::|aubio_notes_get_silence| (internal-aubio-object a-note-detector)))
-
-(defmethod (setf silence-threshold) (a-silence-threshold (a-note-detector note-detector))
-  (aubio/bindings::|aubio_notes_set_silence| (internal-aubio-object a-note-detector)
-                                             a-silence-threshold))
-
-;; Hope the C API would let me ask for different units, as it does with the onset object
-(defun minimum-inter-onset-interval-ms (a-note-detector)
-  (aubio/bindings::|aubio_notes_get_minioi_ms| (internal-aubio-object a-note-detector)))
-
-(defun (setf minimum-inter-onset-interval-ms) (a-minimum-inter-onset-interval a-note-detector)
-  (aubio/bindings::|aubio_notes_set_minioi_ms| (internal-aubio-object a-note-detector)
-                                               a-minimum-inter-onset-interval))
-
-(defun release-drop (a-note-detector)
-  "Get notes object release drop level in dB "
-  (aubio/bindings::|aubio_notes_get_release_drop| (internal-aubio-object a-note-detector)))
-
-(defun (setf release-drop) (a-release-drop a-note-detector)
-  "This function sets the release_drop_level parameter, in dB. When a new note is found, the current level in dB is measured. If the measured level drops under that initial level - release_drop_level, then a note-off will be emitted."
-  (aubio/bindings::|aubio_notes_set_release_drop| (internal-aubio-object a-note-detector) a-release-drop))
 
 (defun detect-note (a-note-detector an-input-source)
   (let ((output-vector (make-float-vector (size an-input-source))))

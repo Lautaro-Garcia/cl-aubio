@@ -3,10 +3,10 @@
   :author "Lautaro García"
   :version "0.0.1"
   :pathname "src"
-  :depends-on (:cl-aubio/raw-bindings)
+  :depends-on (:cl-aubio/raw-bindings :closer-mop)
   :in-order-to ((test-op (test-op :cl-aubio/tests)))
   :components ((:file "package")
-               (:file "aubio-object")
+               (:file "aubio-mop")
                (:file "commons")
                (:file "float-vector")
                (:file "float-matrix")

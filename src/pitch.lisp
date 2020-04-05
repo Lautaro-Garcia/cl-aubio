@@ -12,7 +12,11 @@
    (hop-size :initarg :hop-size :type integer)
    (sample-rate :initarg :sample-rate :type integer)
    (unit :initform (cffi:foreign-string-alloc "Hz") :type cffi:foreign-pointer)
-   (internal-method :writer internal-method :type cffi:foreign-pointer)))
+   (tolerance :accessor tolerance :aubio-reader |aubio_pitch_get_tolerance| :aubio-writer |aubio_pitch_set_tolerance|)
+   (confidence :reader confidence :aubio-reader |aubio_pitch_get_silence|)
+   (silence-threshold :accessor silence-threshold :aubio-reader |aubio_pitch_get_silence| :aubio-writer |aubio_pitch_set_silence|)
+   (internal-method :writer internal-method :type cffi:foreign-pointer))
+  (:metaclass aubio-class))
 
 (defclass pitch ()
   ((pitch :initarg :pitch :reader pitch :type string)
@@ -35,23 +39,6 @@
     (aubio/bindings::|del_aubio_pitch| (internal-aubio-object pitch-detector))
     (cffi:foreign-string-free internal-method)
     (when unit (cffi:foreign-string-free unit))))
-
-(defun tolerance (a-pitch-detector)
-  (aubio/bindings::|aubio_pitch_get_tolerance| (internal-aubio-object a-pitch-detector)))
-
-(defun (setf tolerance) (a-tolerance a-pitch-detector)
-  (aubio/bindings::|aubio_pitch_set_tolerance| (internal-aubio-object a-pitch-detector)
-                                               a-tolerance))
-
-(defmethod confidence ((a-pitch-detector pitch-detector))
-  (aubio/bindings::|aubio_pitch_get_confidence| (internal-aubio-object a-pitch-detector)))
-
-(defmethod silence-threshold ((a-pitch-detector pitch-detector))
-  (aubio/bindings::|aubio_pitch_get_silence| (internal-aubio-object a-pitch-detector)))
-
-(defmethod (setf silence-threshold) (a-silence-threshold (a-pitch-detector pitch-detector))
-  (aubio/bindings::|aubio_pitch_set_silence| (internal-aubio-object a-pitch-detector)
-                                             a-silence-threshold))
 
 (defun pitch-detection-unit (a-pitch-detector)
   (let ((unit (slot-value a-pitch-detector 'unit)))

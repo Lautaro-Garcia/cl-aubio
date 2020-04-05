@@ -2,7 +2,9 @@
 
 (defclass float-matrix (aubio-object)
   ((length :initarg :length :type integer)
-   (height :initarg :height :type integer)))
+   (height :initarg :height :type integer)
+   (data :reader get-data :aubio-reader |fmat_get_data|))
+  (:metaclass aubio-class))
 
 (defun make-float-matrix (length height)
   (make-instance 'float-matrix :length length :height height))
@@ -11,9 +13,6 @@
   (declare (ignore args))
   (with-slots (height length) matrix
     (setf (internal-aubio-object matrix) (aubio/bindings::|new_fmat| height length))))
-
-(defmethod get-data ((a-float-matrix float-matrix))
-  (aubio/bindings::|fmat_get_data| (internal-aubio-object a-float-matrix)))
 
 (defmethod clean ((matrix float-matrix))
   (aubio/bindings::|del_fmat| (internal-aubio-object matrix)))

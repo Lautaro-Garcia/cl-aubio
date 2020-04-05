@@ -4,7 +4,11 @@
   ((uri :initarg :uri :reader uri :type 'string)
    (sample-rate :initarg :sample-rate :type 'integer)
    (hop-size :reader hop-size :initarg :hop-size :type 'integer)
-   (internal-uri :writer internal-uri)))
+   (channels :reader channels :aubio-reader |aubio_source_get_channels|)
+   (duration :reader duration :aubio-reader |aubio_source_get_duration|)
+   (samplerate :reader samplerate :aubio-reader |aubio_source_get_samplerate|)
+   (internal-uri :writer internal-uri))
+  (:metaclass aubio-class))
 
 (defun make-source (uri hop-size &optional (sample-rate 0))
   (make-instance 'source :uri uri :hop-size hop-size :sample-rate sample-rate))
@@ -27,15 +31,6 @@
                  (samples-return-vector (if as-lisp-vector (aubio-to-lisp samples) samples)))
             (values samples-return-vector read-count)))
         (when as-lisp-vector (clean samples))))))
-
-(defun channels (a-source)
-  (aubio/bindings::|aubio_source_get_channels| (internal-aubio-object a-source)))
-
-(defun duration (a-source)
-  (aubio/bindings::|aubio_source_get_duration| (internal-aubio-object a-source)))
-
-(defun samplerate (a-source)
-  (aubio/bindings::|aubio_source_get_samplerate| (internal-aubio-object a-source)))
 
 (define-condition seek-error (error)
   ((source :initarg :source :reader seek-source)

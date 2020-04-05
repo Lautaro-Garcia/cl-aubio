@@ -5,7 +5,12 @@
    (buffer-size :initarg :buffer-size :type integer)
    (hop-size :initarg :hop-size :type integer)
    (sample-rate :initarg :sample-rate :type integer)
-   (internal-method :writer internal-method :type cffi:foreign-pointer)))
+   (silence-threshold :accessor silence-threshold :aubio-reader |aubio_tempo_get_silence| :aubio-writer |aubio_tempo_set_silence|)
+   (peak-picking-threshold :accessor peak-picking-threshold :aubio-reader |aubio_tempo_get_threshold| :aubio-writer |aubio_tempo_set_threshold|)
+   (bpm :reader bpm :aubio-reader |aubio_tempo_get_bpm|)
+   (confidence :reader confidence :aubio-reader |aubio_tempo_get_confidence|)
+   (internal-method :writer internal-method :type cffi:foreign-pointer))
+  (:metaclass aubio-class))
 
 (defclass tempo ()
   ((last-beat-position :initarg :last :reader last-beat-position :type timestamp)
@@ -26,26 +31,6 @@
   (with-slots (internal-method unit) tempo-detector
     (aubio/bindings::|del_aubio_tempo| (internal-aubio-object tempo-detector))
     (cffi:foreign-string-free internal-method)))
-
-(defmethod silence-threshold ((a-tempo-detector tempo-detector))
-  (aubio/bindings::|aubio_tempo_get_silence| (internal-aubio-object a-tempo-detector)))
-
-(defmethod (setf silence-threshold) (a-silence-threshold (a-tempo-detector tempo-detector))
-  (aubio/bindings::|aubio_tempo_set_silence| (internal-aubio-object a-tempo-detector)
-                                             a-silence-threshold))
-
-(defmethod peak-picking-threshold ((a-tempo-detector tempo-detector))
-  (aubio/bindings::|aubio_tempo_get_threshold| (internal-aubio-object a-tempo-detector)))
-
-(defmethod (setf peak-picking-threshold) (a-peak-picking-threshold (a-tempo-detector tempo-detector))
-  (aubio/bindings::|aubio_tempo_set_threshold| (internal-aubio-object a-tempo-detector)
-                                               a-peak-picking-threshold))
-
-(defmethod bpm ((a-tempo-detector tempo-detector))
-  (aubio/bindings::|aubio_tempo_get_bpm| (internal-aubio-object a-tempo-detector)))
-
-(defmethod confidence ((a-tempo-detector tempo-detector))
-  (aubio/bindings::|aubio_tempo_get_confidence| (internal-aubio-object a-tempo-detector)))
 
 (defun time-of-latest-beat-detected (a-tempo-detector &key (unit 'samples))
   (let ((internal-aubio-object (internal-aubio-object a-tempo-detector)))
