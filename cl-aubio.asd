@@ -43,6 +43,8 @@
   :serial t
   :components ((:file "package")
                (:file "utils")
+               (:file "float-matrix")
+               (:file "float-vector")
                (:file "notes")
                (:file "onset")
                (:file "pitch")
