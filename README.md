@@ -140,6 +140,7 @@ This detector returns a `tempo` object that has the data of:
 ### Aubio data structures
 Aubio defines its own data structures for some particular cases. The ones defined here are:
 * `fvec_t` is called `float-vector`
+
 | Functionality                                | Function that does that thing                    |
 |----------------------------------------------|--------------------------------------------------|
 | create an empty vector with defined length   | `make-float-vector`                              |
@@ -155,6 +156,7 @@ Aubio defines its own data structures for some particular cases. The ones define
 
 
 * `fmat_t` is called `float-matrix`
+
 | Functionality                                        | Function that does that thing      |
 |------------------------------------------------------|------------------------------------|
 | create an empty matrix with defined width and height | `make-float-matrix`                |
