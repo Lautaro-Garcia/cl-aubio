@@ -39,7 +39,7 @@
       ((eq unit 'milliseconds) (aubio/bindings::|aubio_tempo_get_last_ms| internal-aubio-object))
       (t (aubio/bindings::|aubio_tempo_get_last| internal-aubio-object)))))
 
-(defun detect-tempo (a-tempo-detector an-input-source &key (unit 'seconds))
+(defun detect-tempo (a-tempo-detector an-input-source &key (unit :seconds))
   (let ((output-vector (make-float-vector (size an-input-source))))
     (unwind-protect
          (progn

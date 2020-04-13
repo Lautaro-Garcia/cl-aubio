@@ -57,16 +57,24 @@
   float-matrix)
 
 ;; The Aubio API expexts a matrix of weight, but only use the first dimension
-(defun weight-matrix (float-matrix weight-vector)
-  (let ((weight-matrix (make-float-matrix-from-array (make-array (list (height float-matrix) (width float-matrix)) :initial-contents (list weight-vector weight-vector)))))
+(defmethod weight-matrix ((float-matrix float-matrix) (weight-vector vector))
+  (declare (type (array float *) weight-vector))
+  (let ((weight-matrix (make-float-matrix-from-array (make-array (list (height float-matrix) (width float-matrix)) :initial-contents (loop :for x :below (height float-matrix) :collecting  weight-vector)))))
     (aubio/bindings::|fmat_weight| (internal-aubio-object float-matrix) (internal-aubio-object weight-matrix))
     (clean weight-matrix))
   float-matrix)
 
-(defmethod copy ((float-matrix float-matrix))
-  (let ((copy (make-float-matrix (width float-matrix) (height float-matrix))))
-    (aubio/bindings::|fmat_copy| (internal-aubio-object float-matrix) (internal-aubio-object copy))
-    copy))
+(defmethod weight-matrix ((float-matrix float-matrix) (weight float))
+  (weight-matrix float-matrix (make-array (width float-matrix) :initial-element weight)))
+
+(defun weight-matrix-row (float-matrix row-index factor)
+  (loop :for column-index :below (width float-matrix) :do (setf (get-sample float-matrix row-index column-index)
+                                                                (* factor (get-sample float-matrix row-index column-index))))
+  float-matrix)
+
+(defmethod copy ((float-matrix float-matrix) &key (to (make-float-matrix (width float-matrix) (height float-matrix))))
+  (aubio/bindings::|fmat_copy| (internal-aubio-object float-matrix) (internal-aubio-object to))
+  to)
 
 (defun multiply-float-matrix-with-vector (float-matrix float-vector)
   (let ((result (make-float-vector (height float-matrix))))

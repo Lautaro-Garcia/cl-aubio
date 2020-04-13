@@ -15,7 +15,8 @@
                (:file "pitch")
                (:file "onset")
                (:file "tempo")
-               (:file "notes")))
+               (:file "notes")
+               (:file "filterbank")))
 
 
 (asdf:defsystem #:cl-aubio/raw-bindings
@@ -48,7 +49,8 @@
                (:file "notes")
                (:file "onset")
                (:file "pitch")
-               (:file "tempo"))
+               (:file "tempo")
+               (:file "filterbank"))
   :perform (test-op (op s) (uiop:symbol-call :5am :run-all-tests)))
 
 (asdf:defsystem #:cl-aubio/examples
@@ -56,7 +58,11 @@
   :author "Lautaro García"
   :version "0.0.1"
   :serial t
-  :depends-on (:cl-aubio)
+  :depends-on (:cl-aubio :vgplot)
   :pathname "examples/"
   :components ((:file "package")
-               (:file "notes")))
+               (:file "notes")
+               (:file "pitch")
+               (:file "onset")
+               (:file "tempo")
+               (:file "filterbank")))

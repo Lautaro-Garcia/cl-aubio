@@ -66,14 +66,29 @@
               #2A((3.0 2.0 1.0) (6.0 5.0 4.0)))))
 
 (def-test all-elements-scaled (:fixture with-float-matrix)
+  (is (equalp (aubio-to-lisp (weight-matrix float-matrix 2.0))
+              #2A((2.0 4.0 6.0) (8.0 10.0 12.0)))))
+
+(def-test all-elements-scaled-by-vector (:fixture with-float-matrix)
   (is (equalp (aubio-to-lisp (weight-matrix float-matrix #(2.0 3.0 2.0)))
               #2A((2.0 6.0 6.0) (8.0 15.0 12.0)))))
+
+(def-test scale-a-row-by-a-factor (:fixture with-float-matrix)
+  (is (equalp (aubio-to-lisp (weight-matrix-row float-matrix 1 2))
+              #2A((1.0 2.0 3.0) (8.0 10.0 12.0)))))
 
 (def-test copy-matrix (:fixture with-float-matrix)
   (let ((copy (copy float-matrix)))
     (is (equalp (aubio-to-lisp float-matrix)
                 (aubio-to-lisp copy)))
     (clean copy)))
+
+(def-test copy-matrix-to-another-memory-address (:fixture with-float-matrix)
+  (let ((another-float-matrix (make-float-matrix (width float-matrix) (height float-matrix))))
+    (copy float-matrix :to another-float-matrix)
+    (is (equalp (aubio-to-lisp float-matrix)
+                (aubio-to-lisp another-float-matrix)))
+    (clean another-float-matrix)))
 
 (def-test multiply-matrix-with-vector (:fixture with-float-matrix)
   (let* ((vector (make-float-vector-from-lisp-vector #(2.0 3.0 2.0)))

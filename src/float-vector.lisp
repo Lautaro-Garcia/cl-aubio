@@ -43,7 +43,7 @@
   (aubio/bindings::|fvec_rev| (internal-aubio-object float-vector))
   float-vector)
 
-(defun weight-vector (float-vector weight-vector)
+(defmethod weight-vector ((float-vector float-vector) (weight-vector vector))
   (declare (type (array float *) weight-vector))
   (let ((aubio-weight-vector (make-float-vector-from-lisp-vector weight-vector)))
     (aubio/bindings::|fvec_weight| (internal-aubio-object float-vector)
@@ -51,11 +51,13 @@
     (clean aubio-weight-vector))
   float-vector)
 
-(defmethod copy ((float-vector float-vector))
-  (let ((copy (make-float-vector (size float-vector))))
-    (aubio/bindings::|fvec_copy| (internal-aubio-object float-vector)
-                     (internal-aubio-object copy))
-    copy))
+(defmethod weight-vector ((float-vector float-vector) (weight float))
+  (weight-vector float-vector (make-array (size float-vector) :initial-element weight)))
+
+(defmethod copy ((float-vector float-vector) &key (to (make-float-vector (size float-vector))))
+  (aubio/bindings::|fvec_copy| (internal-aubio-object float-vector)
+                               (internal-aubio-object to))
+  to)
 
 (defun weighted-copy (float-vector weight-vector)
   (let ((copy (make-float-vector (size float-vector)))

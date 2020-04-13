@@ -9,5 +9,6 @@
      :make-onset-detector :reset-onset-detector :adaptive-whitening-enabled? :compression-factor :time-of-latest-onset-detected :detect-onset :onset-detection-function
      :make-tempo-detector :bpm :time-of-latest-beat-detected :detect-tempo :tempo :last-beat-position
      :make-note-detector :detect-note :release-drop :note :midi-note :velocity :note-off :note-on :silence :minimum-inter-onset-interval-ms
+     :make-filterbank :normalization-enabled? :power-parameter :filter-coefficients :triangle-bands
      :make-float-vector :make-float-matrix-from-array :get-data :size :make-float-vector-from-lisp-vector :get-vector-sample :reverse-vector :weight-vector :weighted-copy
-     :make-float-matrix :get-channel-data :width :height :get-sample :set-all-samples :set-all-samples-to-zero :set-all-samples-to-one :reverse-matrix :weight-matrix :copy :multiply-float-matrix-with-vector))
+     :make-float-matrix :get-channel-data :width :height :get-sample :set-all-samples :set-all-samples-to-zero :set-all-samples-to-one :reverse-matrix :weight-matrix :weight-matrix-row :copy :multiply-float-matrix-with-vector))

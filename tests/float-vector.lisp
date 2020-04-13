@@ -47,7 +47,11 @@
   (is (equalp (aubio-to-lisp (reverse-vector vector))
               #(3.0 2.0 1.0))))
 
-(def-test all-elements-scaled (:fixture with-float-vector)
+(def-test all-elements-scaled-by-single-scalar (:fixture with-float-vector)
+  (is (equalp (aubio-to-lisp (weight-vector vector 2.0))
+              #(2.0 4.0 6.0))))
+
+(def-test all-elements-scaled-by-vector (:fixture with-float-vector)
   (is (equalp (aubio-to-lisp (weight-vector vector #(5.0 3.0 2.0)))
               #(5.0 6.0 6.0))))
 
@@ -56,6 +60,13 @@
     (is (equalp (aubio-to-lisp vector)
                 (aubio-to-lisp copied-vector)))
     (clean copied-vector)))
+
+(def-test copy-to-another-memory-address (:fixture with-float-vector)
+  (let ((another-vector (make-float-vector (size vector))))
+    (copy vector :to another-vector)
+    (is (equalp (aubio-to-lisp vector)
+                (aubio-to-lisp another-vector)))
+    (clean another-vector)))
 
 (def-test weighted-copy (:fixture with-float-vector)
   (let ((copied-vector (weighted-copy vector #(5.0 3.0 2.0))))
