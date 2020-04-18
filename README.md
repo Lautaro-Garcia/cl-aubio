@@ -49,4 +49,5 @@ reifies the thing being detected (in the previous example, a note is simply a li
 * [Onset detection](docs/onset.md)
 * [Note detection](docs/notes.md)
 * [Tempo detection](docs/tempo.md)
+* [Filterbank](docs/filterbank.md)
 * [Aubio data structures](docs/datastructures.md)
