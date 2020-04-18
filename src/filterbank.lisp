@@ -3,6 +3,7 @@
 (defclass filterbank (aubio-object)
   ((buffer-size :initarg :buffer-size :reader buffer-size :type integer)
    (number-of-filters :initarg :number-of-filters :reader number-of-filters :type integer)
+   (normalization-enabled :accessor normalization-enabled? :aubio-reader |aubio_filterbank_get_norm| :aubio-writer |aubio_filterbank_set_norm|)
    (power :accessor power-parameter :aubio-reader |aubio_filterbank_get_power| :aubio-writer |aubio_filterbank_set_power| :type float))
   (:metaclass aubio-class))
 
@@ -17,12 +18,11 @@
 (defmethod clean ((a-filterbank filterbank))
   (aubio/bindings::|del_aubio_filterbank| (internal-aubio-object a-filterbank)))
 
-(defun normalization-enabled? (a-filterbank)
-  (= 1.0 (aubio/bindings::|aubio_filterbank_get_norm| (internal-aubio-object a-filterbank))))
+(defmethod normalization-enabled? :around (a-filterbank)
+  (= (call-next-method) 1.0))
 
-(defun (setf normalization-enabled?) (status a-filterbank)
-  (declare (type boolean status))
-  (aubio/bindings::|aubio_filterbank_set_norm| (internal-aubio-object a-filterbank) (if status 1.0 0.0)))
+(defmethod (setf normalization-enabled?) :around (status a-filterbank)
+  (call-next-method (if status 1.0 0) a-filterbank))
 
 (defun filter-coefficients (a-filterbank)
   "Returns a copy of the filter-coefficients of A-FILTERBANK."

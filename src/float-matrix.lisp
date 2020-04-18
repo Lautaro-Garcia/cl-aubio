@@ -29,6 +29,9 @@
 (defmethod clean ((matrix float-matrix))
   (aubio/bindings::|del_fmat| (internal-aubio-object matrix)))
 
+(defmethod size ((float-matrix float-matrix))
+  (* (width float-matrix) (height float-matrix)))
+
 (defun get-channel-data (a-float-matrix a-channel-number &key as-lisp-vector)
   (declare (type boolean as-lisp-vector)
            (type integer a-channel-number))

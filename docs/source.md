@@ -5,7 +5,7 @@ A source object represents a source of audio.
 |----------------------------------------|-------------------------------|
 | constructor                            | `make-source`                 |
 | get samplerate                         | `samplerate`                  |
-| get number of channels                 | `channels`                    |
+| get number of channels                 | `number-of-channels`          |
 | get duration (in frames) of the source | `duration`                    |
 | seek source to a particular position   | `seek`                        |
 | read source                            | `read-source`                 |

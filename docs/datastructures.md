@@ -1,5 +1,8 @@
 # Aubio data structures
-Aubio defines its own data structures for some particular cases. The ones defined here are the following
+Aubio defines its own data structures for some particular cases.
+You can transform any of this structures to a lisp one by using the function `aubio-to-lisp`.
+The ones defined here are the following
+
 
 ## `fvec_t` is called `float-vector`
 
@@ -15,6 +18,7 @@ Aubio defines its own data structures for some particular cases. The ones define
 | multiply every element by a different factor | `weight-vector`                                  |
 | copy                                         | `copy-vector`                                    |
 | copy and weight in a single operation        | `weighted-copy`                                  |
+| size                                         | `size`                                           |
 
 
 ## `fmat_t` is called `float-matrix`
@@ -29,9 +33,8 @@ Aubio defines its own data structures for some particular cases. The ones define
 | set all elements to zero                             | `set-all-samples-to-zero`          |
 | set all elements to one                              | `set-all-samples-to-one`           |
 | reverse                                              | `reverse-matrix`                   |
-| scale every row by a different factor                | `weight-matrix`                    |
+| scale every column by a different factor             | `weight-matrix`                    |
+| scale a single row by a factor                       | `weight-matrix-row`                |
 | copy                                                 | `copy-matrix`                      |
 | multiply with a vector                               | `multiply-matrix-with-vector`      |
-
-
-You can transform any of this structures to a lisp one by using the function `aubio-to-lisp`
+| total size                                           | `size`                             |

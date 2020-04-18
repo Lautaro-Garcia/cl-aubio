@@ -44,6 +44,7 @@ reifies the thing being detected (in the previous example, a note is simply a li
 
 ### Objects currently ported
 * [Source](docs/source.md)
+* [Sink](docs/sink.md)
 * [Pitch detection](docs/pitch.md)
 * [Onset detection](docs/onset.md)
 * [Note detection](docs/notes.md)

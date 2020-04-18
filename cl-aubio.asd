@@ -16,7 +16,8 @@
                (:file "onset")
                (:file "tempo")
                (:file "notes")
-               (:file "filterbank")))
+               (:file "filterbank")
+               (:file "sink")))
 
 
 (asdf:defsystem #:cl-aubio/raw-bindings
@@ -50,7 +51,8 @@
                (:file "onset")
                (:file "pitch")
                (:file "tempo")
-               (:file "filterbank"))
+               (:file "filterbank")
+               (:file "sink"))
   :perform (test-op (op s) (uiop:symbol-call :5am :run-all-tests)))
 
 (asdf:defsystem #:cl-aubio/examples
@@ -65,4 +67,5 @@
                (:file "pitch")
                (:file "onset")
                (:file "tempo")
-               (:file "filterbank")))
+               (:file "filterbank")
+               (:file "sink")))

@@ -96,3 +96,6 @@
     (is (equalp (aubio-to-lisp result) #(14.0 35.0)))
     (clean vector)
     (clean result)))
+
+(def-test total-size (:fixture with-float-matrix)
+  (is (= (size float-matrix) 6)))
