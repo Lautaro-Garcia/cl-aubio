@@ -14,7 +14,8 @@
                                             :package :aubio/bindings
                                             :foreign-library-name "aubio/bindings::aubio"
                                             :include-sources ()
-                                            :foreign-library-spec ((t (:or "libaubio.so.5.4.8" "libaubio"))))))))
+                                            :foreign-library-spec ((:unix (:or "libaubio.so.5" "libaubio.so"))
+                                                                   (t (:default "libaubio"))))))))
 
                (:module "src"
                 :serial t
